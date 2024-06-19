@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulaador de cuotas</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="script.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Formulario de Financiamiento</h2>
+      <form id="financingForm">
+        <label for="vehicleModel">Modelo de vehículo</label>
+        <select id="vehicleModel"></select>
+
+        <label for="isMarry">¿Es casado?</label>
+        <input type="checkbox" id="isMarry" />
+
+        <label for="initialDeposit">Aporte inicial (USD)</label>
+        <input
+          type="number"
+          id="initialDeposit"
+          min="0"
+          placeholder="Ingrese el monto en USD"
+        />
+
+        <label for="paymentTerm">Plazo de pago</label>
+        <select id="paymentTerm">
+          <option value="3">3 años</option>
+          <option value="4">4 años</option>
+          <option value="5">5 años</option>
+          <option value="6">6 años</option>
+          <option value="7">7 años</option>
+          <option value="8">8 años</option>
+        </select>
+      </form>
+
+      <div class="results" id="results">
+        <!-- Resultados serán mostrados aquí -->
+      </div>
+    </div>
+  </body>
+</html>
