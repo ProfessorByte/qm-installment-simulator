@@ -1,19 +1,25 @@
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
+a {
+  font-weight: 500;
+  text-decoration: none;
+}
+
+html,
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+  min-width: 240px;
   min-height: 100vh;
-  font-family: Arial, sans-serif;
+  font-family: Arial, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .container {
+  min-height: 100vh;
+  padding: 3px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,17 +30,20 @@ body {
 .mainTitle {
   font-size: 2rem;
   font-weight: bold;
+  text-align: center;
 }
 
 .mainDescription {
   font-size: 1.3rem;
   color: #777777;
+  text-align: center;
 }
 
 .financingDescription {
   font-size: 1.2rem;
   color: #00b773;
   font-weight: bold;
+  text-align: center;
 }
 
 .financingForm {
@@ -46,7 +55,8 @@ body {
   justify-content: center;
   flex-direction: column;
   gap: 15px;
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   font-size: large;
 }
 
@@ -61,6 +71,11 @@ select {
   padding: 12px;
   border: 1px solid #d1d1d1;
   border-radius: 6px;
+  width: 100%;
+}
+
+input[type="checkbox"] {
+  width: auto;
 }
 
 #calculateButton {
@@ -99,7 +114,8 @@ select {
   margin: 36px 0;
   padding: 45px;
   border-radius: 36px;
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   font-size: large;
   color: white;
 }
@@ -125,17 +141,23 @@ select {
   padding: 36px;
   border-radius: 36px;
   width: 100%;
+
+  h3 {
+    text-align: center;
+  }
 }
 
 .titleQuota {
   font-size: 0.9rem;
   font-weight: bold;
+  text-align: center;
 }
 
 #firstPeriodQuota,
 #secondPeriodQuota {
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 2vw, 2rem);
   font-weight: bold;
+  text-align: center;
 }
 
 .titleDataExtra {
