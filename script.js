@@ -9,7 +9,7 @@ const vehicles = [
   },
   {
     model: "Quantum E4 PLUS con batería de Litio 60V/105Ah ",
-    price: 15500,
+    price: 9480,
   },
   {
     model: "Quantum E4 SMART con batería de Litio 60V/105Ah ",
@@ -252,10 +252,10 @@ function calculateInstallments() {
     table.averageQuotaPeriods();
   table.displayTable();
 
-  $("#firstPeriodQuota").innerHTML = `${averageFirstPeriod} Bs. | ${(
+  $("#firstPeriodQuota").innerHTML = `${averageFirstPeriod} Bs. ↔ ${(
     averageFirstPeriod / ONE_DOLAR_VALUE_IN_BOB
   ).toFixed(2)} USD`;
-  $("#secondPeriodQuota").innerHTML = `${averageSecondPeriod} Bs. | ${(
+  $("#secondPeriodQuota").innerHTML = `${averageSecondPeriod} Bs. ↔ ${(
     averageSecondPeriod / ONE_DOLAR_VALUE_IN_BOB
   ).toFixed(2)} USD`;
 }
