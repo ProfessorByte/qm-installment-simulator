@@ -1,44 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simulaador de cuotas</title>
+    <title>Calculadora de Créditos de Quantum Motors</title>
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="script.js"></script>
   </head>
   <body>
-    <div class="container">
-      <h2>Formulario de Financiamiento</h2>
-      <form id="financingForm">
-        <label for="vehicleModel">Modelo de vehículo</label>
-        <select id="vehicleModel"></select>
+    <section class="container">
+      <h1 class="mainTitle">Simulador de cuotas</h1>
+      <p class="mainDescription">
+        Calcula el valor de las cuotas de tu crédito vehicular
+      </p>
+      <p class="financingDescription">
+        Financiamiento disponible hasta el 90% del precio total
+      </p>
+      <form id="financingForm" class="financingForm">
+        <div class="formGroup">
+          <label for="vehicleModel">Modelo de vehículo</label>
+          <select id="vehicleModel"></select>
+          <span>
+            Precio del vehículo seleccionado:
+            <strong id="vehiclePrice"></strong>
+          </span>
+        </div>
 
-        <label for="isMarry">¿Es casado?</label>
-        <input type="checkbox" id="isMarry" />
+        <label>
+          <input type="checkbox" id="isMarry" />
+          ¿Es casado/a?
+        </label>
 
-        <label for="initialDeposit">Aporte inicial (USD)</label>
-        <input
-          type="number"
-          id="initialDeposit"
-          min="0"
-          placeholder="Ingrese el monto en USD"
-        />
+        <div class="formGroup">
+          <label for="initialDeposit">Aporte inicial (USD)</label>
+          <input
+            type="number"
+            id="initialDeposit"
+            min="0"
+            placeholder="Ingrese el monto en USD"
+          />
+          <span id="initDepositValidation"></span>
+        </div>
 
-        <label for="paymentTerm">Plazo de pago</label>
-        <select id="paymentTerm">
-          <option value="3">3 años</option>
-          <option value="4">4 años</option>
-          <option value="5">5 años</option>
-          <option value="6">6 años</option>
-          <option value="7">7 años</option>
-          <option value="8">8 años</option>
-        </select>
+        <div class="formGroup">
+          <label for="paymentTerm">Plazo de pago</label>
+          <select id="paymentTerm">
+            <option value="3">3 años</option>
+            <option value="4">4 años</option>
+            <option value="5">5 años</option>
+            <option value="6">6 años</option>
+            <option value="7">7 años</option>
+            <option value="8">8 años</option>
+          </select>
+        </div>
+        <span>
+          Tasa de interés durante los primeros 2 años:
+          <strong id="firstPeriodRate"></strong>
+        </span>
+        <span>
+          Tasa de interés a partir del tercer año:
+          <strong id="secondPeriodRate"></strong>
+        </span>
+
+        <button id="calculateButton" type="submit">
+          Calcular cuota aproximada
+        </button>
+        <span id="messageValidation"></span>
       </form>
 
-      <div class="results" id="results">
-        <!-- Resultados serán mostrados aquí -->
+      <div id="resultContainer" class="resultContainer hidden">
+        <section class="results">
+          <h3>CUOTAS APROXIMADAS</h3>
+          <div class="periodShow">
+            <span class="titleQuota"
+              >Tu cuota mensual durante los primeros 2 años:</span
+            >
+            <span id="firstPeriodQuota"></span>
+          </div>
+          <div class="periodShow">
+            <span class="titleQuota"
+              >Tu cuota mensual a partir del tercer año:</span
+            >
+            <span id="secondPeriodQuota"></span>
+          </div>
+        </section>
+
+        <h3 class="titleDataExtra">DATOS DE LA CUOTA</h3>
+        <section class="extraData">
+          <div class="dataShow">
+            <strong>ENTIDAD FINANCIERA:</strong>
+            <span>Banco Unión</span>
+          </div>
+          <div class="dataShow">
+            <strong>VEHÍCULO:</strong>
+            <span id="vehicleNameData"></span>
+          </div>
+          <div class="dataShow">
+            <strong>PRECIO DEL VEHÍCULO:</strong>
+            <span id="vehiclePriceData"></span>
+          </div>
+          <div class="dataShow">
+            <strong>PLAZO DE PAGO:</strong>
+            <span id="paymentDeadlineData"></span>
+          </div>
+          <div class="interestRateShow">
+            <strong>TASA DE INTERÉS:</strong>
+            <div class="dataShow">
+              <strong>Durante los primeros 2 años:</strong>
+              <span>3.50% anual fija</span>
+            </div>
+            <div class="dataShow">
+              <strong>A partir del tercer año:</strong>
+              <span>6.99% anual fija</span>
+            </div>
+          </div>
+        </section>
+        <section class="actionButtons">
+          <a
+            href="https://wa.me/59177980051?text=Quisiera%20m%C3%A1s%20informaci%C3%B3n%20por%20favor%20sobre%20el%20crédito%20bancario"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contactButton"
+          >
+            Contactarse con un asesor de créditos
+          </a>
+          <button id="newCalcButton" type="button">
+            Realizar nuevo cálculo
+          </button>
+        </section>
       </div>
-    </div>
+    </section>
   </body>
 </html>

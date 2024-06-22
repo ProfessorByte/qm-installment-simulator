@@ -1,28 +1,30 @@
 const ONE_DOLAR_VALUE_IN_BOB = 6.97;
+const FIRST_PERIOD_INTEREST = 0.035;
+const SECOND_PERIOD_INTEREST = 0.0699;
 
 const vehicles = [
   {
-    model: "NEXUS",
+    model: "Quantum NEXUS con batería de Litio LiFePO4",
     price: 14500,
   },
   {
-    model: "E4 PLUS",
+    model: "Quantum E4 PLUS con batería de Litio 60V/105Ah ",
     price: 15500,
   },
   {
-    model: "E4 SMART",
+    model: "Quantum E4 SMART con batería de Litio 60V/105Ah ",
     price: 8790,
   },
   {
-    model: "E4 MONTAÑERO",
+    model: "Quantum E4 MONTAÑERO con batería de Litio 60V/105Ah ",
     price: 8050,
   },
   {
-    model: "E4",
+    model: "Quantum E4 con batería de Litio 60V/105Ah ",
     price: 7900,
   },
   {
-    model: "DUKE",
+    model: "Quantum DUKE con batería de Litio 60V/105Ah",
     price: 7140,
   },
 ];
@@ -34,8 +36,8 @@ class Table {
     isMarry = false,
     numberDecimals = 2,
     recalcMonthNumber = 25,
-    firstPeriodInterest = 0.035,
-    secondPeriodInterest = 0.0699,
+    firstPeriodInterest = FIRST_PERIOD_INTEREST,
+    secondPeriodInterest = SECOND_PERIOD_INTEREST,
     amortizationEveryNumDays = 30
   ) {
     this.principal = principal;
@@ -60,6 +62,8 @@ class Table {
   averageQuotaPeriods() {
     const firstPeriodRows = this.rows.slice(0, this.recalcMonthNumber);
     const secondPeriodRows = this.rows.slice(this.recalcMonthNumber);
+
+    console.log(secondPeriodRows);
 
     return {
       averageFirstPeriod: this.round(
@@ -161,9 +165,23 @@ const $ = (element) => document.querySelector(element);
 
 const $form = $("#financingForm");
 const $vehicleModelInput = $("#vehicleModel");
+const $vehiclePriceShow = $("#vehiclePrice");
 const $isMarryInput = $("#isMarry");
 const $initialDepositInput = $("#initialDeposit");
 const $paymentTermInput = $("#paymentTerm");
+const $firstPeriodRateShow = $("#firstPeriodRate");
+const $secondPeriodRateShow = $("#secondPeriodRate");
+const $messageValidation = $("#messageValidation");
+const $calculateButton = $("#calculateButton");
+const $resultContainer = $("#resultContainer");
+const $newCalcButton = $("#newCalcButton");
+
+$firstPeriodRateShow.innerHTML = `${(FIRST_PERIOD_INTEREST * 100).toFixed(
+  2
+)}% anual fija`;
+$secondPeriodRateShow.innerHTML = `${(SECOND_PERIOD_INTEREST * 100).toFixed(
+  2
+)}% anual fija`;
 
 vehicles.forEach((vehicle) => {
   const option = document.createElement("option");
@@ -172,28 +190,59 @@ vehicles.forEach((vehicle) => {
   $vehicleModelInput.appendChild(option);
 });
 
+let vehicleModelPrice, initialDeposit, paymentTerm;
+
+$vehiclePriceShow.innerHTML = `$${vehicles[0].price.toFixed(2)}`;
+$("#vehicleNameData").innerHTML = vehicles[0].model;
+$("#vehiclePriceData").innerHTML = `${vehicles[0].price} USD`;
+$("#paymentDeadlineData").innerHTML = "36 meses";
+
 $form.addEventListener("input", calculateInstallments);
+$form.addEventListener("submit", submitForm);
+$newCalcButton.addEventListener("click", () => {
+  $form.classList.remove("hidden");
+  $resultContainer.classList.add("hidden");
+});
 
 function calculateInstallments() {
-  const vehicleModelPrice = parseFloat($vehicleModelInput.value);
-  const initialDeposit = parseFloat($initialDepositInput.value) ?? NaN;
-  const paymentTerm = parseInt($paymentTermInput.value) * 12;
+  vehicleModelPrice = parseFloat($vehicleModelInput.value);
+  initialDeposit = parseFloat($initialDepositInput.value) ?? NaN;
+  paymentTerm = parseInt($paymentTermInput.value) * 12;
+
+  $vehiclePriceShow.innerHTML = `$${vehicleModelPrice.toFixed(2)}`;
+  $("#vehicleNameData").innerHTML =
+    $vehicleModelInput.options[$vehicleModelInput.selectedIndex].text;
+  $("#vehiclePriceData").innerHTML = `${vehicleModelPrice} USD`;
+  $("#paymentDeadlineData").innerHTML = `${paymentTerm} meses`;
 
   if (isNaN(vehicleModelPrice) || isNaN(initialDeposit) || isNaN(paymentTerm)) {
-    document.getElementById("results").innerHTML =
-      "Por favor, complete todos los campos.";
+    $messageValidation.innerHTML = "Por favor, complete todos los campos.";
     return;
+  } else {
+    $messageValidation.innerHTML = "";
   }
 
   const minInitialDeposit = vehicleModelPrice * 0.1;
 
   if (initialDeposit < minInitialDeposit) {
-    document.getElementById(
-      "results"
+    $(
+      "#initDepositValidation"
     ).innerHTML = `El aporte inicial debe ser al menos el 10% del precio del vehículo <strong>(USD ${minInitialDeposit.toFixed(
       2
     )})</strong>.`;
+    $initialDepositInput.style.borderColor = "red";
     return;
+  } else if (initialDeposit > vehicleModelPrice) {
+    $(
+      "#initDepositValidation"
+    ).innerHTML = `El aporte inicial no puede ser mayor al precio del vehículo <strong>(USD ${vehicleModelPrice.toFixed(
+      2
+    )})</strong>.`;
+    $initialDepositInput.style.borderColor = "red";
+    return;
+  } else {
+    $initialDepositInput.style.borderColor = "#d1d1d1";
+    $("#initDepositValidation").innerHTML = "";
   }
 
   const principal =
@@ -203,8 +252,31 @@ function calculateInstallments() {
     table.averageQuotaPeriods();
   table.displayTable();
 
-  document.getElementById("results").innerHTML = `
-    <p><strong>Cuota promedio primeros 2 años (3.5%):</strong> BOB ${averageFirstPeriod}</p>
-    <p><strong>Cuota promedio a partir del tercer año (6.99%):</strong> BOB ${averageSecondPeriod}</p>
-`;
+  $("#firstPeriodQuota").innerHTML = `${averageFirstPeriod} Bs. | ${(
+    averageFirstPeriod / ONE_DOLAR_VALUE_IN_BOB
+  ).toFixed(2)} USD`;
+  $("#secondPeriodQuota").innerHTML = `${averageSecondPeriod} Bs. | ${(
+    averageSecondPeriod / ONE_DOLAR_VALUE_IN_BOB
+  ).toFixed(2)} USD`;
+}
+
+function submitForm(event) {
+  event.preventDefault();
+
+  if (
+    isNaN(vehicleModelPrice) ||
+    isNaN(initialDeposit) ||
+    isNaN(paymentTerm) ||
+    initialDeposit < vehicleModelPrice * 0.1 ||
+    initialDeposit > vehicleModelPrice
+  ) {
+    $messageValidation.innerHTML =
+      "Por favor, complete correctamente todos los campos antes de continuar.";
+    return;
+  } else {
+    $messageValidation.innerHTML = "";
+  }
+
+  $form.classList.add("hidden");
+  $resultContainer.classList.remove("hidden");
 }
